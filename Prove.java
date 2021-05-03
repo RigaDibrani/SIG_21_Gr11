@@ -10,3 +10,4 @@ public class des_1 {
     System.out.print("Shenoni plaintext: ");
     String plaintext=input.nextLine();
     }
+    
