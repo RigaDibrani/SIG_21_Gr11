@@ -1,24 +1,42 @@
-import java.util.Scanner;
-import java.security.spec.*;
 import javax.crypto.*;
-import javax.crypto.spec.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
-public class DES {
-    public static void main(String[] args){
-    Scanner input=new Scanner(System.in);
-    System.out.print("Shenoni plaintext: ");
-    String plaintext=input.nextLine();
-    String encryptedtext=Encrypted(plaintext);
-    System.out.println("Encrypted text: "+encryptedtext);
-    String decryptedtext=Decrypted(encryptedtext);
-    System.out.println("Decrypted text: "+decryptedtext);
-    input.close();
-    }
-    public static String Encrypted(String plaintext){
-        return null;
-    }
-    public static String Decrypted(String text){
-        return null;
-    }
-}
+import java.util.Scanner
+public class Main {
+        public static void main(String[] args) {
+            try {
+                Scanner input = new Scanner(System.in);
+                KeyGenerator desKeyGenerator = KeyGenerator.getInstance("DES");
+                Cipher desCipherEncrypter = Cipher.getInstance("DES");
+     
+                SecretKey key = desKeyGenerator.generateKey();
+                desCipherEncrypter.init(Cipher.ENCRYPT_MODE, key);
+                desCipherDecrypter.init(Cipher.DECRYPT_MODE, key);
+     
+            }
+            catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException e ) {
+                e.printStackTrace();
+            }
+     
+        }
+     
+
+        public static String encrypt(Cipher cipher, String plainStr) throws BadPaddingException,IllegalBlockSizeException
+        {
+            byte[] plainBytes;
+            byte[] encryptedBytes;
+            plainBytes=plainStr.getBytes(StandardCharsets.ISO_8859_1);
+            encryptedBytes=cipher.doFinal(plainBytes);
+            return Base64.getEncoder().encodeToString(encryptedBytes);
+        }
+     
+     
+     
+     }
+
