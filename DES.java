@@ -18,18 +18,41 @@ public class DES {
                 SecretKey key = desKeyGenerator.generateKey();
                 desCipherEncrypter.init(Cipher.ENCRYPT_MODE, key);
                 desCipherDecrypter.init(Cipher.DECRYPT_MODE, key);
-
+                
+                System.out.print("Enter plaintextin: ");
+                String message = input.nextLine();
+                String encrypted = encrypt(desCipherEncrypter, message);
+                System.out.println("Encrypted text: " + encrypted);
+                String decrypted = decrypt(desCipherDecrypter, encrypted);
+                System.out.println("Decrypted text: " + decrypted);
+                
+                //file
                 System.out.print("File to read: ");
                 String path = input.nextLine();
                 System.out.print("File for encryption: ");
                 String fileenc = input.nextLine();
                 fileencrypt(desCipherEncrypter,path,fileenc);
+                System.out.print("File for decryption: ");
+                String filedec = input.nextLine();
+                filedecrypt(desCipherDecrypter, fileenc,filedec );
                
      
             }
-            catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException e ) {
+                catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                noSuchAlgorithmException.printStackTrace();
+              } catch (InvalidKeyException invalidKeyException) {
+                invalidKeyException.printStackTrace();
+              } catch (NoSuchPaddingException noSuchPaddingException) {
+                noSuchPaddingException.printStackTrace();
+              } catch (BadPaddingException badPaddingException) {
+                badPaddingException.printStackTrace();
+              } catch (IllegalBlockSizeException illegalBlockSizeException) {
+                illegalBlockSizeException.printStackTrace();
+              } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
      
         }
      
@@ -62,5 +85,27 @@ public class DES {
             write.close();
         }
      
+            public static void filedecrypt(Cipher cipher,String filetodecrypt,String dencryptedfile) throws FileNotFoundException,Exception{
+            Scanner dinput=null;
+            FileWriter write1 =new FileWriter(dencryptedfile);
+            File filefordecrypt=new File(filetodecrypt);
+            dinput=new Scanner(filetodecrypt);
+            while (dinput.hasNext()) {
+            String str = dinput.nextLine();
+            String decrypt = decrypt(cipher, str);
+            write1.write(decrypt + " ");
+        }
+            write1.close();
+            System.out.println("Decrypted text");
+    }
+            
+            public static String decrypt(Cipher cipher,String encryptedStr) throws BadPaddingException,IllegalBlockSizeException
+    {
+            byte[] encryptedBytes=Base64.getMimeDecoder().decode(encryptedStr);
+            byte[] decryptedBytes=cipher.doFinal(encryptedBytes);
+            return new String(decryptedBytes,StandardCharsets.UTF_8);
+    }
+
+            
      }
 
