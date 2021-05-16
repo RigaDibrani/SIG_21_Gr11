@@ -1,11 +1,11 @@
 import javax.crypto.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import javax.crypto.spec.IvParameterSpec;
+import java.io.*;
+import java.security.InvalidAlgorithmParameterException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.Base64;
 import java.util.Scanner;
 public class DES {
@@ -16,8 +16,9 @@ public class DES {
   private static Cipher decrypt;
   //initializing vector
   private static final byte[] initialization_vector = { 22, 33, 11, 44, 55, 99, 66, 77 };
+  //main() method
   public static void main(String[] args) throws NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException,
-  IllegalBlockSizeException, InvalidKeyException, InvalidAlgorithmParameterException {
+  IllegalBlockSizeException, InvalidKeyException, InvalidAlgorithmParameterException, IOException {
                  //path of the file that we want to encrypt
                  Scanner input=new Scanner(System.in);
                  SecretKey scrtkey = KeyGenerator.getInstance("DES").generateKey();
@@ -31,7 +32,7 @@ public class DES {
 
                  //----------------------------------------TEXT/FILE ENCRYPTION/DECRYPTION----------------------------------------------//
                  System.out.print("Zgjedhni text ose file : ");
-                 String fromuser=user.nextLine();
+                 String fromuser=input.nextLine();
                  fromuser=fromuser.toLowerCase();
                  if(fromuser.equals("text")){
                      text();
@@ -61,13 +62,13 @@ public class DES {
   
            public static void file() throws IOException {
                 Scanner input=new Scanner(System.in);
-                System.out.println("File to encrypt:");
+                System.out.print("File to encrypt:");
                 String textFile=input.nextLine();
 
-                System.out.println("Where to save encrypted file:");
+                System.out.print("Where to save encrypted file:");
                 String encryptedData =input.nextLine();
 
-                System.out.println("Where to save decrypted file:");
+                System.out.print("Where to save decrypted file:");
                 String decryptedData = input.nextLine();
 
                 //calling encrypt() method to encrypt the file
