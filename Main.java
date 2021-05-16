@@ -19,6 +19,7 @@ public class Main implements ActionListener {
     private static JLabel decryptlabel;
     private static JTextField ourdecrypt;
     private static JButton button;
+    private static JButton buttone;
     private static Cipher encrypt;
 
     //creating an instance of the Cipher class for decryption
@@ -71,12 +72,14 @@ public class Main implements ActionListener {
         panel.add(ourdecrypt);
 
         button=new JButton("Encrypt");
-        button.setBounds(155,140,100,18);
+        button.setBounds(50,140,100,18);
         button.addActionListener(new Main());
         panel.add(button);
 
-      
-
+        buttone=new JButton("Decrypt");
+        buttone.setBounds(250,140,100,18);
+        buttone.addActionListener(new Main());
+        panel.add(buttone);
 
         frame.setVisible(true);
     }
@@ -88,19 +91,23 @@ public class Main implements ActionListener {
         String decrypted = null;
 
         try {
-            encrypted = encrypt(encrypt, inputMessage);
-            System.out.println("Encrypted text: " + encrypted);
-            ourencrypt.setText(encrypted);
-            decrypted = decrypt(decrypt, encrypted);
-            System.out.println("Decrypted text: " + decrypted);
-            ourdecrypt.setText(decrypted);
-            
-        } catch (BadPaddingException | IllegalBlockSizeException badPaddingException) {
-            badPaddingException.printStackTrace();
+            encrypted = encrypt(encrypt, inputMessage); 
+            decrypted = decrypt(decrypt, encrypted);            
+        } catch (BadPaddingException | IllegalBlockSizeException ex) {
+            ex.printStackTrace();
         }
        
-      
-
+        if(e.getSource()==button) {
+            //encrypted = encrypt(encrypt, inputMessage);
+            System.out.println("Encrypted text: " + encrypted);
+            ourencrypt.setText(encrypted);
+            //String decrypted = decrypt(decrypt, encrypted);
+        }
+        else if(e.getSource()==buttone){
+            System.out.println("Decrypted text: " + decrypted);
+            ourdecrypt.setText(decrypted);
+        }
+     
     }
 
     public static String encrypt(Cipher cipher, String plainStr) throws BadPaddingException,IllegalBlockSizeException
