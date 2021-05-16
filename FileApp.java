@@ -27,7 +27,8 @@ public class FileApp implements ActionListener {
     String inputMessage3;
     //initializing vector
     private static final byte[] initialization_vector = { 22, 33, 11, 44, 55, 99, 66, 77 };
-    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchPaddingException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchPaddingException,
+    InvalidKeyException, InvalidAlgorithmParameterException {
 
         SecretKey scrtkey = KeyGenerator.getInstance("DES").generateKey();
         AlgorithmParameterSpec aps = new IvParameterSpec(initialization_vector);
@@ -55,7 +56,7 @@ public class FileApp implements ActionListener {
         panel.add(usertext);
 
 
-        encryptlabel=new JLabel("Encrypted");
+        encryptlabel=new JLabel("Encrypted file's path");
         encryptlabel.setBounds(50,60,150,25);
         panel.add(encryptlabel);
 
@@ -63,7 +64,7 @@ public class FileApp implements ActionListener {
         ourencrypt.setBounds(170,60,200,25);
         panel.add(ourencrypt);
 
-        decryptlabel=new JLabel("Decrypted");
+        decryptlabel=new JLabel("Decrypted file's path");
         decryptlabel.setBounds(50,100,150,25);
         panel.add(decryptlabel);
 
@@ -83,17 +84,17 @@ public class FileApp implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e)  {
         inputMessage1=usertext.getText();
-        inputMessage2=usertext.getText();
-        inputMessage3=usertext.getText();
-        
+        inputMessage2=ourencrypt.getText();
+        inputMessage3=ourdecrypt.getText();
+        try {
             encryption(new FileInputStream(inputMessage1), new FileOutputStream(inputMessage2));
             decryption(new FileInputStream(inputMessage2), new FileOutputStream(inputMessage3));
 
-        
-
-
+        } catch (IOException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
     }
-
+    
     private static void encryption(InputStream input, OutputStream output)
             throws IOException
     {
