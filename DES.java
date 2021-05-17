@@ -21,17 +21,22 @@ public class DES {
   IllegalBlockSizeException, InvalidKeyException, InvalidAlgorithmParameterException, IOException {
                  //path of the file that we want to encrypt
                  Scanner input=new Scanner(System.in);
-                 SecretKey scrtkey = KeyGenerator.getInstance("DES").generateKey();
-                 AlgorithmParameterSpec aps = new IvParameterSpec(initialization_vector);
-                 encrypt=Cipher.getInstance("DES/CBC/PKCS5Padding");
+                 SecretKey scrtkey = KeyGenerator.getInstance("DES").generateKey();//Gjeneron nje secret(symetric)key me ane te implenetimit te libraris javax.crypto
+                 //getInstance("DES") specifikon se qelsi i gjeneruar eshte des key
+                 AlgorithmParameterSpec aps = new IvParameterSpec(initialization_vector);//krijon nje objekt duke perdorur bytes of initialization_vector si IV
+                 //Cipher  class siguron funksionalitetin e kriptografis per enkriptim dhe dekriptim
+                 encrypt=Cipher.getInstance("DES/CBC/PKCS5Padding");//me ane te getInstace specifikojm llojin e algoritmit qe perdorim ne rastintone
+                 //modin CBC dhe padding PKCS5Padding"
                  decrypt= Cipher.getInstance("DES/CBC/PKCS5Padding");
               
                  // Initialize the cipher for encryption and decryption
                  encrypt.init(Cipher.ENCRYPT_MODE, scrtkey,aps);
+                 //pasi qe kemi cbc mode atehere per ta inicalizuar si parameter hyres perveq caktimi i modit se 
+                 //a eshte enkriptim apo dekriptim dhe qelsit duhet ta vendosim edhe IV
                  decrypt.init(Cipher.DECRYPT_MODE, scrtkey,aps);
 
                  //----------------------------------------TEXT/FILE ENCRYPTION/DECRYPTION----------------------------------------------//
-                 System.out.print("Zgjedhni text ose file : ");
+                 System.out.print("Zgjedhni text ose file : ");//varet prej userit
                  String fromuser=input.nextLine();
                  fromuser=fromuser.toLowerCase();
                  if(fromuser.equals("text")){
@@ -72,9 +77,9 @@ public class DES {
                 String decryptedData = input.nextLine();
 
                 //calling encrypt() method to encrypt the file
-                encryption(new FileInputStream(textFile), new FileOutputStream(encryptedData));
+                encryption(new FileInputStream(textFile), new FileOutputStream(encryptedData));//parameter hyres e ka file i cili duhet te enkriptohet dhe file ku duhet me vendos filen e enkriptuar
                 //calling decrypt() method to decrypt the file
-                decryption(new FileInputStream(encryptedData), new FileOutputStream(decryptedData));
+                decryption(new FileInputStream(encryptedData), new FileOutputStream(decryptedData));//parameter hyres ka filen e enkriptuar dhe filen ku ka me vendos filen e dekriptuar
                 //prints the statement if the program runs successfully
                 System.out.println("The encrypted and decrypted files have been created successfully.");
                 input.close();
@@ -85,34 +90,34 @@ public class DES {
           {
                 byte[] plainBytes;
                 byte[] encryptedBytes;
-                plainBytes=plainStr.getBytes(StandardCharsets.UTF_8);
-                encryptedBytes=cipher.doFinal(plainBytes);
+                plainBytes=plainStr.getBytes(StandardCharsets.UTF_8);//stringun e marr si parameter hyres e kthen ne byte dhe e vendos ne plainbytes
+                encryptedBytes=cipher.doFinal(plainBytes);//me ane te do finel enkriptohet ne cipher qe e kemi inicializu kete rast encrypt
                 //return new String(encryptedBytes,StandardCharsets.ISO_8859_1);
-                return Base64.getEncoder().encodeToString(encryptedBytes);
+                return Base64.getEncoder().encodeToString(encryptedBytes);//konverton encrypted text nga byte ne string dhe kthen si rez
           }
 
            public static String decrypt(Cipher cipher,String encryptedStr) throws BadPaddingException,IllegalBlockSizeException
           {
-                byte[] encryptedBytes=Base64.getDecoder().decode(encryptedStr);
+                byte[] encryptedBytes=Base64.getDecoder().decode(encryptedStr);//dekodon stringun encryptedstr
                 //byte[] encryptedBytes=encryptedStr.getBytes(StandardCharsets.ISO_8859_1);
-                byte[] decryptedBytes=cipher.doFinal(encryptedBytes);
-                return new String(decryptedBytes,StandardCharsets.UTF_8);
+                byte[] decryptedBytes=cipher.doFinal(encryptedBytes);//e dekripton ne siq e kemi inicaializu cipher
+                return new String(decryptedBytes,StandardCharsets.UTF_8);//kthen decrypted data ne string dhe e vendos ne rez
           }
   
            //----------------------------------------FILE ENCRYPTION/DECRYPTION----------------------------------------------//
            private static void encryption(InputStream input, OutputStream output)
            throws IOException
           {
-                output = new CipherOutputStream(output, encrypt);
+                output = new CipherOutputStream(output, encrypt);//CipherOutputStream kominim mes Cipher dhe OutputStream qe merr si paramtere file ku ka me vendos tekstin e enkriptun dhe parametri tjeter specifikon modin
                 //calling the writeBytes() method to write the encrypted bytes to the file
-                writeBytes(input, output);
+                writeBytes(input, output);//path prej ku kemi me marr filen per enkriptim dhe path ku kemi me vendos filen e enkriptuar
           }
   
            //method for decryption
            private static void decryption(InputStream input, OutputStream output)
            throws IOException
           {
-                input = new CipherInputStream(input, decrypt);
+                input = new CipherInputStream(input, decrypt);//parametri pare file i enkriptuar dhe parametri i dyte modi 
                 //calling the writeBytes() method to write the decrypted bytes to the file
                 writeBytes(input, output);
           }
@@ -121,11 +126,11 @@ public class DES {
            private static void writeBytes(InputStream input, OutputStream output)
            throws IOException
           {
-                byte[] writeBuffer = new byte[512];
+                byte[] writeBuffer = new byte[512];//write buffer per me shenu me gjatesi 512 
                 int readBytes;
-                while ((readBytes = input.read(writeBuffer)) >= 0)
+                while ((readBytes = input.read(writeBuffer)) >= 0)//lexon te dhenat nga input deri sa ato te jen te barabart me 0 dhe ishenon ato ne readbyte
                 {
-                    output.write(writeBuffer, 0, readBytes);
+                    output.write(writeBuffer, 0, readBytes);//ne output i vendos tekstin e lexun
                 }
 
                  //closing the output stream
