@@ -37,11 +37,11 @@ public class Main implements ActionListener {
         decrypt.init(Cipher.DECRYPT_MODE, scrtkey,aps);
 
 
-
+        //krijimi i nje frame dhe panel nga libraria swing keto jane builtin metoda
         JPanel panel=new JPanel();
         JFrame frame=new JFrame();
         frame.setSize(450,270);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//mbyllet prograbim kur bojm exit
         frame.add(panel);
 
         panel.setLayout(null);
@@ -49,7 +49,7 @@ public class Main implements ActionListener {
         label=new JLabel("Plaintext");
         label.setBounds(50,20,150,25);
         panel.add(label);
-
+        //field per me marr te dhanen nga useri
         usertext =new JTextField(20);
         usertext.setBounds(170,20,200,25);
         panel.add(usertext);
@@ -58,7 +58,7 @@ public class Main implements ActionListener {
         encryptlabel=new JLabel("Encrypted text");
         encryptlabel.setBounds(50,60,150,25);
         panel.add(encryptlabel);
-
+        //field per me shenu tektin e enkriptun
         ourencrypt =new JTextField(20);
         ourencrypt.setBounds(170,60,200,25);
         panel.add(ourencrypt);
@@ -66,43 +66,45 @@ public class Main implements ActionListener {
         decryptlabel=new JLabel("Decrypted text");
         decryptlabel.setBounds(50,100,150,25);
         panel.add(decryptlabel);
-
+        //field per me shenu tektin e dekriptun
         ourdecrypt =new JTextField(20);
         ourdecrypt.setBounds(170,100,200,25);
         panel.add(ourdecrypt);
-
+        //buton i cili pas klikimit e enkripton tekstin
         button=new JButton("Encrypt");
         button.setBounds(50,140,100,18);
         button.addActionListener(new Main());
         panel.add(button);
-
+        //buton i cili pas klikimit e dekripton tekstin
         buttone=new JButton("Decrypt");
         buttone.setBounds(250,140,100,18);
         buttone.addActionListener(new Main());
         panel.add(buttone);
-
+        //per shfaqjen a frame
         frame.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e)  {
-        inputMessage=usertext.getText();
+        //butonav ia shtojm action event listener e implementume nga interface ,ne menyre qe kur klikojm mbi buton me kry nje funksion te caktun
+        inputMessage=usertext.getText();//mesazhin nga useri e vendosim ne stringun inputMessage
         String encrypted = null;
         String decrypted = null;
-
+        //enkriptimi dhe dekriptimi
         try {
             encrypted = encrypt(encrypt, inputMessage); 
             decrypted = decrypt(decrypt, encrypted);            
         } catch (BadPaddingException | IllegalBlockSizeException ex) {
             ex.printStackTrace();
         }
-       
+       //nese klikon butonin encrypt e tekstin e enkriptun e vendos ne ourencrypt
         if(e.getSource()==button) {
             //encrypted = encrypt(encrypt, inputMessage);
             System.out.println("Encrypted text: " + encrypted);
             ourencrypt.setText(encrypted);
             //String decrypted = decrypt(decrypt, encrypted);
         }
+        //nese klikon butonin decrypt e tekstin e enkriptun e vendos ne ourdecrypt
         else if(e.getSource()==buttone){
             System.out.println("Decrypted text: " + decrypted);
             ourdecrypt.setText(decrypted);
