@@ -1,6 +1,4 @@
 # SIG_21_Gr11
-Grupi 11
-
 
 Enkriptimi/dekriptimi i tekstit dhe fajllave përmes DES në Java
 
